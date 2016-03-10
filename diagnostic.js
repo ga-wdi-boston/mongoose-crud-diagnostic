@@ -29,29 +29,82 @@ mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/mongoose-crud');
 
 /// ADD YOUR CODE BELOW
+const db = mongoose.connection;
+const Art = require('./art.js');
 
-const create = (name, description, startYear, endYear) => {};
+const done = function() {
+  db.close();
+};
+
+const create = (name, description, startYear, endYear) => {
 // Success -> Print new Movement as JSON
 // Failure -> Console.error
+Art.create({
+  name: name,
+  description: description,
+  startYear: startYear,
+  endYear: endYear,
+}).then(function(art) {
+  console.log(art);
+}).catch(function(error) {
+  console.error(error);
+}).then(done);
+};
 
-const index = () => {};
+const index = () => {
 // Success -> Print all Movements as JSON
 // Failure -> Console.error
+let search = {};
+if (arguments[0] && arguments[1]) {
+  let field = arguments[0];
+  let criterion = arguments[1];
+  if (criterion[0] === '/') {
+    let regex = new RegExp(criterion.slice(1, criterion.length - 1));
+    search[field] = regex;
+  } else {
+    search[field] = criterion;
+  }
+}
 
-const show = (id) => {};
+Art.find(search).then(function(artMovements) {
+  artMovements.forEach(function(art) {
+    console.log(art.toJSON());
+  });
+}).catch(console.error).then(done);
+};
+
+const show = (id) => {
 // Success -> If the specified Movement exists, print it as JSON;
 //              otherwise, print "Not Found" and exit.
 // Failure -> Console.error
+Art.findById(id).then(function(art) {
+  console.log(art.toObject());
+}).catch(console.error).then(done);
+};
 
-const update = (id, field, value) => {};
+const update = (id, field, value) => {
 // Success -> If the specified Movement exists, update it and print the
 //              updated Movement as JSON; otherwise, print "Not Found" and exit.
 // Failure -> Console.error
+let modify = {};
+modify[field] = value;
+Art.findByIdAndUpdate(id, { $set: modify }, { new: true })
+  .then(function(art) {
+    console.log(art.toJSON());
+  }).catch(console.error)
+  .then(done);
+};
 
-const destroy = (id) => {};
+const destroy = (id) => {
 // Success -> If the specified Movement exists, destroy it and print 'removed';
 //              otherwise, print "Not Found" and exit.
 // Failure -> Console.error
+Art.findById(id).then(function(art) {
+  console.log('removed');
+  return art.remove();
+}).catch(console.error
+).then(done);
+};
 
 module.exports = {
   create,
@@ -59,4 +112,4 @@ module.exports = {
   show,
   update,
   destroy
-}
+};
