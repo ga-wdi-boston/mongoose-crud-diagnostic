@@ -30,15 +30,25 @@ mongoose.connect('mongodb://localhost/mongoose-crud');
 
 /// ADD YOUR CODE BELOW
 
+const Movement = require('./models/movement.js');
+
 const create = (name, description, startYear, endYear) => {};
 // Success -> Print new Movement as JSON
 // Failure -> Console.error
 
-const index = () => {};
+const index = (req, res, next) => {
+  Movement.find()
+  .then(movements => res.json({movements}))
+  .catch(err => next(err));
+};
 // Success -> Print all Movements as JSON
 // Failure -> Console.error
 
-const show = (id) => {};
+const show = (id,res,req, next) => {
+  Movement.findById(id)
+  .then(movement => movement ? res.json({movement}) : next(console.log('Not Found'));
+  .catch(err => next(err));
+};
 // Success -> If the specified Movement exists, print it as JSON;
 //              otherwise, print "Not Found" and exit.
 // Failure -> Console.error
