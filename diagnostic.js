@@ -30,7 +30,19 @@ mongoose.connect('mongodb://localhost/mongoose-crud');
 
 /// ADD YOUR CODE BELOW
 
-const create = (name, description, startYear, endYear) => {};
+'use strict';
+
+const models = require('app/models');
+const Movement = models.movement;
+
+const create = (name, description, startYear, endYear) => {
+  Movement.create(name, description, startYear, endYear)
+    .then(movement => {
+      return movement.save();
+    })
+    .then(movement => print(movement.json()))
+    .catch(err => console.error(err));
+};
 // Success -> Print new Movement as JSON
 // Failure -> Console.error
 
@@ -43,12 +55,35 @@ const show = (id) => {};
 //              otherwise, print "Not Found" and exit.
 // Failure -> Console.error
 
-const update = (id, field, value) => {};
+const update = (id, field, value) => {
+  let movement = {_id: id};
+  Movement.findOneAndUpdate(movement, field, value)
+  .then(movement => {
+    if (!movement) {
+      return next();
+    }
+
+    return movement.update(movement, field, value)
+      .then(movement => print(movement.json()));
+  })
+  .catch(err => console.error(err));
+};
 // Success -> If the specified Movement exists, update it and print the
 //              updated Movement as JSON; otherwise, print "Not Found" and exit.
 // Failure -> Console.error
 
-const destroy = (id) => {};
+const destroy = (id) => {
+  Movement.findById(id)
+  .then( movement => {
+    if (!movement) {
+      return next();
+    }
+    movement.remove();
+    print('removed');
+  })
+  .catch(() => print('Not Found'))
+  .then(() => exit();
+};
 // Success -> If the specified Movement exists, destroy it and print 'removed';
 //              otherwise, print "Not Found" and exit.
 // Failure -> Console.error
