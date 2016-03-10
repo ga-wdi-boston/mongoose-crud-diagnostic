@@ -46,7 +46,11 @@ const create = (name, description, startYear, endYear) => {
 // Success -> Print new Movement as JSON
 // Failure -> Console.error
 
-const index = () => {};
+const index = () => {
+  Movement.find()
+    .then(movements => print(movements.json())
+    .catch(err => console.error(err));
+};
 // Success -> Print all Movements as JSON
 // Failure -> Console.error
 
