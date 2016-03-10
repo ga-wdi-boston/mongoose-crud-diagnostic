@@ -54,7 +54,11 @@ const index = () => {
 // Success -> Print all Movements as JSON
 // Failure -> Console.error
 
-const show = (id) => {};
+const show = (id) => {
+  Movement.findById(id)
+    .then(movement => movement ? print(movements.json() : next())  // If you find an book, send the JSON,
+    .catch(err => next(err));                          // otherwise go to the next action
+};
 // Success -> If the specified Movement exists, print it as JSON;
 //              otherwise, print "Not Found" and exit.
 // Failure -> Console.error
