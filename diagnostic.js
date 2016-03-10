@@ -28,22 +28,47 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/mongoose-crud');
 
+const Movement = ('app/models/movement');
+
 /// ADD YOUR CODE BELOW
 
-const create = (name, description, startYear, endYear) => {};
+// My comments:  This is not complete and I feel like I did the diagnostic
+// based off of Antony's api.
+
+const create = (req, res, next) => {
+  Movement.create(req.body.movement)
+    .then(movement => res.json({ movement }))
+    .catch(err => next(err));
+};
 // Success -> Print new Movement as JSON
 // Failure -> Console.error
 
-const index = () => {};
+const index = (req, res, next) => {
+  Movement.find()
+  .then(movement => res.json({ movement }))
+  .catch(err => next(err));
+};
 // Success -> Print all Movements as JSON
 // Failure -> Console.error
 
-const show = (id) => {};
+const show = (req, res, next) => {
+  Movement.findById(req.params.id)
+  .then(movement => res.json({ movement }))
+  .catch(err => next(err));
+};
 // Success -> If the specified Movement exists, print it as JSON;
 //              otherwise, print "Not Found" and exit.
 // Failure -> Console.error
 
-const update = (id, field, value) => {};
+const update = (req, res, next) => {
+  Movement.findById(req.params.id)
+  .then(movement => {
+    if(!movement){
+      return next();
+    }
+
+  })
+};
 // Success -> If the specified Movement exists, update it and print the
 //              updated Movement as JSON; otherwise, print "Not Found" and exit.
 // Failure -> Console.error
