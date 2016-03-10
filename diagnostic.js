@@ -30,25 +30,63 @@ mongoose.connect('mongodb://localhost/mongoose-crud');
 
 /// ADD YOUR CODE BELOW
 
-const create = (name, description, startYear, endYear) => {};
+const controller = require('lib/wiring/controller');
+const models = require('app/models');
+const Art = models.art;
+
+
+const create = (req,res,next) => {
+  Art.create(req.body.art)
+  .then(art => {})
+  .then(art => res.json({ art }))
+  .catch(err => next(err));
+};
 // Success -> Print new Movement as JSON
 // Failure -> Console.error
 
-const index = () => {};
+const index = () => {
+  Art.find()
+  .then(arts => res.json({ arts }))
+  .catch(err => next(err));
+};
 // Success -> Print all Movements as JSON
 // Failure -> Console.error
 
-const show = (id) => {};
+const show = (id) => {
+  Art.findById(req.params.id)
+    .then(Art => Art ? res.json({ Art }) : next())
+    .catch(err => next(err));
+};
 // Success -> If the specified Movement exists, print it as JSON;
 //              otherwise, print "Not Found" and exit.
 // Failure -> Console.error
 
-const update = (id, field, value) => {};
+const update = (id, field, value) => {
+  Art.findById(req.params.id)
+    .then(art => {
+      if (!art || req.currentUser._id.toString() !== art._owner.toString()) {
+        next();
+      }
+      return art.update(req.body.art)
+        .then(() => res.sendStatus(200));
+    })
+    .catch(err => next(err));
+};
 // Success -> If the specified Movement exists, update it and print the
 //              updated Movement as JSON; otherwise, print "Not Found" and exit.
 // Failure -> Console.error
 
-const destroy = (id) => {};
+const destroy = (id) => {
+  Art.findById(req.params.id)
+  .then( art => {
+    if (!art || req.currentUser._id.toString() !== art._owner.toString()) {
+      next();
+    }
+    art.remove();
+    res.sendStatus(200);
+  })
+  .catch(err => next())
+};
 // Success -> If the specified Movement exists, destroy it and print 'removed';
 //              otherwise, print "Not Found" and exit.
 // Failure -> Console.error
