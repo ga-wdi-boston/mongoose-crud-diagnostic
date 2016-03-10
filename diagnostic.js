@@ -29,30 +29,79 @@ mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/mongoose-crud');
 
 /// ADD YOUR CODE BELOW
+const Movement = require('./models/movement.js')
+
+const done = function() {
+  db.close();
+};
 
 const create = (name, description, startYear, endYear) => {};
 // Success -> Print new Movement as JSON
 // Failure -> Console.error
+  Movement.create({
+    name: name,
+    description: description,
+    startYear: startYear,
+    endYear: endYear.
+  }).then(function(err, movement) {
+    console.log(movement.toJSON());
+  }).catch(console.error).then(done);
 
-const index = () => {};
+const index = () => {
 // Success -> Print all Movements as JSON
 // Failure -> Console.error
+  Movement.find().then(function(movement) {
+    movement.forEach(function(movement) {
+      console.log(movement.toJSON());
+    });
+  }).catch(console.error).then(done);
+};
 
-const show = (id) => {};
+
+const show = (id) => {
 // Success -> If the specified Movement exists, print it as JSON;
 //              otherwise, print "Not Found" and exit.
 // Failure -> Console.error
+  if (Movement.findById(id)) {
+    Movement.findById(id).then(function() {
+     console.log(movement.toJSON());
+   }).catch(console.error).then(done);
+ }
+ else {
+   console.log("Not Found");
+ }
+};
 
-const update = (id, field, value) => {};
+const update = (id, field, value) => {
 // Success -> If the specified Movement exists, update it and print the
 //              updated Movement as JSON; otherwise, print "Not Found" and exit.
 // Failure -> Console.error
+  if (Movement.findById(id)) {
+    let modify = {};
+      modify[field] = value;
+      Movement.findByIdAndUpdate(id, { $set: modify }, { new: true })
+       .then(function(movement) {
+         console.log(movement.toJSON());
+       }).catch(console.error).then(done);
+     }
+     else {
+       console.log("Not Found");
+     }
+};
 
-const destroy = (id) => {};
+const destroy = (id) => {
 // Success -> If the specified Movement exists, destroy it and print 'removed';
 //              otherwise, print "Not Found" and exit.
 // Failure -> Console.error
-
+  if (Movement.findById(id)) {
+    Movement.findById(id).then(function(movement){
+      movement.remove();
+    }).catch(console.error).then(done);
+  }
+  else {
+    console.log("Not Found");
+  }     
+};
 module.exports = {
   create,
   index,
