@@ -21,6 +21,6 @@ const movementSchema = new mongoose.Schema({
   timesstamp: true
 });
 
-const Movement = mongoose.modal('movement', movementSchema);
+const Movement = mongoose.model('movement', movementSchema);
 
 module.exports = Movement;
