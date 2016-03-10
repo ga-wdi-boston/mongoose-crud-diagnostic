@@ -29,21 +29,39 @@ mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/mongoose-crud');
 
 /// ADD YOUR CODE BELOW
+const controller = require('lib/wiring/controller');
+const models = require('app/models');
+const Art = models.art;
 
-const create = (name, description, startYear, endYear) => {};
+const create = (name, description, startYear, endYear) => {
+  let art = Object.assign({ _owner: req.currentUser._id }, req.body.art);
+  Art.create(art)
+    .then(art => res.json({ art }))
+    .catch(err => console.error(err););
+};
 // Success -> Print new Movement as JSON
 // Failure -> Console.error
 
-const index = () => {};
+const index = () => {
+  Art.find()
+    .then(art => res.json({ art }))
+    .catch(err => console.error(err););
+};
 // Success -> Print all Movements as JSON
 // Failure -> Console.error
 
-const show = (id) => {};
+const show = (id) => {
+  Art.findById(req.params.id)
+  .then(art => art ? res.json({ art }) : next())
+  .catch(err => next(err));
+};
 // Success -> If the specified Movement exists, print it as JSON;
 //              otherwise, print "Not Found" and exit.
 // Failure -> Console.error
 
-const update = (id, field, value) => {};
+const update = (id, field, value) => {
+
+};
 // Success -> If the specified Movement exists, update it and print the
 //              updated Movement as JSON; otherwise, print "Not Found" and exit.
 // Failure -> Console.error
