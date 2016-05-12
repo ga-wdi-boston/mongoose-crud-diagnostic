@@ -30,10 +30,6 @@ mongoose.connect('mongodb://localhost/mongoose-crud-diagnostic');
 
 const Movement = require('./models/movement.js');
 
-const done = function() {
-  db.close();
-};
-
 /// ADD YOUR CODE BELOW
 
 const create = (name, description, startYear, endYear) => {
@@ -44,17 +40,17 @@ const create = (name, description, startYear, endYear) => {
     endYear: endYear,
   }).then(function(movement) {
     console.log(movement.toJSON());
-  }).catch(console.error).then(done);
+  }).catch(console.error);
 };
 // Success -> console.log new Movement as JSON
 // Failure -> Console.error
 
 const index = () => {
-  Movement.find(search).then(function(movements) {
+  Movement.find().then(function(movements) {
     movements.forEach(function(movement) {
       console.log(movement.toJSON());
     });
-  }).catch(console.error).then(done);
+  }).catch(console.error);
 };
 
 // Success -> console.log all Movements as JSON
@@ -62,8 +58,12 @@ const index = () => {
 
 const show = (id) => {
   Movement.findById(id).then(function(movement) {
-    console.log(movement.toJSON());
-  }).catch(console.error).then(done);
+    if (movement) {
+      console.log(movement.toJSON());
+    } else {
+      console.log("Not Found");
+    }
+  }).catch(console.error);
 };
 
 // Success -> If the specified Movement exists, console.log it as JSON;
@@ -78,7 +78,7 @@ const update = (id, field, value) => {
     return movement.save();
   }).then(function(movement) {
     console.log(movement.toJSON());
-  }).catch(console.error).then(done);
+  }).catch(console.error);
 };
 
 // Success -> If the specified Movement exists, update it and console.log the
@@ -88,7 +88,8 @@ const update = (id, field, value) => {
 const destroy = (id) => {
   Movement.findById(id).then(function(movement) {
     movement.remove();
-  }).catch(console.error).then(done);
+    console.log('removed');
+  }).catch(console.error);
 };
 
 // Success -> If the specified Movement exists, destroy it and console.log 'removed';
