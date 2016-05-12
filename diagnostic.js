@@ -32,28 +32,132 @@ const Movement = require('./models/movement.js');
 
 /// ADD YOUR CODE BELOW
 
-const create = (name, description, startYear, endYear) => {};
-// Success -> console.log new Movement as JSON
-// Failure -> Console.error
+const create = (name, description, startYear, endYear) => {
+  Movement.create({
+    name: name,
+    description: description,
+    startYear: startYear,
+    endYear: endYear
+  }).then(function(movement) {
+    console.log(movement.toJSON());
+  }).catch(console.error).then(done);
+};
 
-const index = () => {};
-// Success -> console.log all Movements as JSON
-// Failure -> Console.error
 
-const show = (id) => {};
-// Success -> If the specified Movement exists, console.log it as JSON;
-//              otherwise, console.log "Not Found" and exit.
-// Failure -> Console.error
+const index = () => {
+  let search = {};
+  if (arguments[0] && arguments[1]) {
+    let field = arguments[0];
+    let criterion = arguments[1];
+    if (criterion[0] === '/') {
+      let regex = new RegExp(criterion.slice(1, criterion.length -1));
+      search[field] = regex;
+    } else {
+      search[field] = criterion;
+    }
+  }
+  Movement.find(search).then(function(movement){
+    movement.forEach(function(movement){
+      console.log(movement.toJSON());
+    });
+  }).catch(console.error).then(done);
+};
 
-const update = (id, field, value) => {};
-// Success -> If the specified Movement exists, update it and console.log the
-//              updated Movement as JSON; otherwise, console.log "Not Found" and exit.
-// Failure -> Console.error
+const show = (id) => {
+  Movement.findById(id).then(function(movement) {
+    console.log(movement.toJSON());
+  }).catch(console.error).then(done);
+};
 
-const destroy = (id) => {};
+const update = (id, field, value) => {
+  let modify = {};
+  modify[field] = value;
+  Movement.findById(id).then(function(movement) {
+    movement[field] = value;
+    return movement.save();
+  }).then (function(movement) {
+    console.log(movement.toJSON());
+  }).catch(console.error).then(done);
+};
+
+const destroy = (id) => {
 // Success -> If the specified Movement exists, destroy it and console.log 'removed';
 //              otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
+
+  Movement.findById(id).then(function(movement){
+    movement.remove();
+  }).catch(console.error).then(done);
+};
+
+
+
+db.once('open', function() {
+  let command = process.argv[2];
+
+  // Using more than once, avoiding jshint complaints
+  let field;
+  let id;
+
+  switch (command) {
+    case 'create':
+      let name = process.argv[3];
+      let description = process.argv[4];
+      let startYear =  process.argv[5];
+      let endYear =  process.argv[6];
+      break;
+
+      case 'search':
+      field = process.argv[3];
+      let criterion = process.argv[4];
+      if (!criterion) {
+        console.log('Not Found');
+        done();
+      } else {
+        index(field, criterion);
+      }
+      break;
+
+    case `show`:
+      id = process.argv[3];
+      show(id);
+      if (true || name) {
+        show(name, description, startYear, endYear);
+      } else {
+        console.log('Not Found');
+        done();
+      }
+      break;
+
+    case 'update':
+      id = process.argv[3];
+      field = process.argv[4];
+      let value = process.argv[5];
+      update(id, field, value);
+      if (true || name) {
+        update(name, description, startYear, endYear);
+      } else {
+        console.log('Not Found');
+        done();
+      }
+      break;
+
+    case 'destroy':
+      id = process.argv[3];
+      destroy(id);
+      if (true || name) {
+        destroy(name, description, startYear, endYear);
+      } else {
+        console.log('Not Found');
+        done();
+      }
+      break;
+
+    default:
+      index();
+      break;
+  }
+});
 
 module.exports = {
   create,
