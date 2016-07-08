@@ -30,27 +30,85 @@ mongoose.connect('mongodb://localhost/mongoose-crud-diagnostic');
 
 const Movement = require('./models/movement.js');
 
+const db = mongoose.connection;
+
+const done = function() {
+  db.close();
+};
 /// ADD YOUR CODE BELOW
 
-const create = (name, description, startYear, endYear) => {};
+const create = (name, description, startYear, endYear) => {
+  Movement.create({
+  name: name,
+  description: description,
+  startYear: startYear,
+  endYear: endYear
+}).then((movement) => {
+  console.log(movement.toJSON()); //
+}).catch(console.error)
+.then(done);
+};
 // Success -> console.log new Movement as JSON
 // Failure -> Console.error
 
-const index = () => {};
+const index = () => {
+  Movement.find({})
+.then((movement) => {
+ movement.forEach((movement) => {
+   console.log(movement.toJSON());
+ });
+}).catch(console.error)
+.then(done);
+};
 // Success -> console.log all Movements as JSON
 // Failure -> Console.error
 
-const show = (id) => {};
+const show = (id) => {
+  Movement.findById(id)
+.then((movement) => {
+  if (!movement) {
+    console.log("Not found");
+    done();
+  }
+  console.log(movement.toJSON());
+})
+.catch(console.error)
+.then(done);
+};
 // Success -> If the specified Movement exists, console.log it as JSON;
 //              otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
 
-const update = (id, field, value) => {};
+const update = (id, field, value) => {
+  Movement.findById(id)
+.then((movement) => {
+  if(!movement){
+    console.log("Not found");
+    done();
+  }
+    movement.set(field, value);
+    return movement.save();
+}).then(function(movement) {
+  console.log(movement.toJSON());
+}).catch(console.error)
+.then(done);
+};
 // Success -> If the specified Movement exists, update it and console.log the
 //              updated Movement as JSON; otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
 
-const destroy = (id) => {};
+const destroy = (id) => {
+  Movement.findById(id)
+.then((movement) => {
+  if(!movement) {
+    console.log("Not found");
+    done();
+  }
+  movement.remove();
+})
+.catch(console.error)
+.then(done);
+};
 // Success -> If the specified Movement exists, destroy it and console.log 'removed';
 //              otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
