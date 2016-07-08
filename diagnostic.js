@@ -85,7 +85,11 @@ const show = (id) => {
   // Failure -> Console.error
   Movement.findById(id)
   .then((movement) => {
-    console.log(movement.toJSON());
+    if(movement){
+      console.log(movement.toJSON());
+    } else {
+      console.log("Not Found").done();
+    }
   })
   .catch(console.error)
   .then(done);
@@ -100,11 +104,16 @@ const update = (id, field, value) => {
   modify[field] = value;
   Movement.findById(id)
   .then((movement) => {
-    movement.set(field, value);
-    return movement.save();
+    if(movement){
+      movement.set(field, value);
+      return movement.save();
+    } else {
+      console.log("Not Found")
+      .done();
+    }
   })
-  .then(function(place) {
-    console.log(place.toJSON());
+  .then(function(movement) {
+    console.log(movement.toJSON());
   })
   .catch(console.error)
   .then(done);
@@ -117,10 +126,15 @@ const destroy = (id) => {
   // Failure -> Console.error
   Movement.findById(id)
   .then((movement) => {
-    movement.remove();
+    if(movement){
+      movement.remove();
+    } else {
+      console.log("Not Found")
+      .done();
+    }
   })
-.catch(console.error)
-.then(done);
+  .catch(console.error)
+  .then(done);
 };
 
 
