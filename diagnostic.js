@@ -32,25 +32,70 @@ const Movement = require('./models/movement.js');
 
 /// ADD YOUR CODE BELOW
 
-const create = (name, description, startYear, endYear) => {};
+const create = (name, description, startYear, endYear, ancestor) => {
+  ArtPiece.create ({
+    name: name,
+    tag : description,
+    beginning: startYear,
+    ended: endYear,
+    ancestor: ancestor,
+  }).then((art) => {
+    console.log(art.toJSON());
+  }).catch(console.error)
+.then(done);
+};
+};
 // Success -> console.log new Movement as JSON
 // Failure -> Console.error
 
-const index = () => {};
+const index = function() {
+  ArtPiece.find({})
+  .then((art) => {
+    art.forEach((art) => {
+      console.log(art.toJSON());
+    });
+  }).catch(console.error)
+  .then(done);
+};
 // Success -> console.log all Movements as JSON
 // Failure -> Console.error
 
-const show = (id) => {};
+const show = (id) => {
+  Art.findById(id)
+  .then(() => {
+    console.log(art.toJSON());
+  })
+  .catch(console.error)
+  .then(done);
+};
 // Success -> If the specified Movement exists, console.log it as JSON;
 //              otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
 
-const update = (id, field, value) => {};
+const update = (id, field, value) => {
+  let modify = {};
+  modify[field] = value;
+  Art.findById(id)
+    .then((art) => {
+      art[field] = value;
+      return art.save();
+    }).then(function(art) {
+      console.log(art.toJSON());
+    }).catch(console.error)
+    .then(done);
+};
 // Success -> If the specified Movement exists, update it and console.log the
 //              updated Movement as JSON; otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
 
-const destroy = (id) => {};
+const destroy = (id) => {
+  ArtPiece.findById(id)
+  .then((person) => {
+    art.remove();
+  })
+  .catch(console.error)
+  .then(done);
+};
 // Success -> If the specified Movement exists, destroy it and console.log 'removed';
 //              otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
