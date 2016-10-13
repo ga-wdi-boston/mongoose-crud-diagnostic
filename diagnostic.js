@@ -99,16 +99,28 @@ const update = (id, field, value) => {
       return movement.save();
     }
   })
+  // Failure -> Console.error
   .catch(console.error)
   .then(done);
 };
 
-// Failure -> Console.error
 
-const destroy = (id) => {};
-// Success -> If the specified Movement exists, destroy it and console.log 'removed';
-//              otherwise, console.log "Not Found" and exit.
-// Failure -> Console.error
+const destroy = (id) => {
+  Movement.findById(id)
+  // Success -> If the specified Movement exists, destroy it and console.log 'removed';
+  //              otherwise, console.log "Not Found" and exit.
+  .then((movement) => {
+    if (!movement) {
+      console.log("Not Found");
+    } else {
+      console.log("removed");
+      return movement.remove();
+    }
+  })
+  // Failure -> Console.error
+  .catch(console.error)
+  .then(done);
+};
 
 module.exports = {
   create,
