@@ -78,6 +78,8 @@ const index = () => {
 const show = (id) => {
   Movement.findById(id)
     .then((movement) => {
+      // this ternary is giving me a weird linter error, but i don't know why...
+      // movement ? console.log(movement) : console.log("Not Found")
       if (movement) {
         console.log(JSON.parse(movement));
       } else {
