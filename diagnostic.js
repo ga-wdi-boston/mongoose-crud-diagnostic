@@ -45,7 +45,9 @@ const create = (name, description, startYear, endYear) => {
     startYear: startYear,
     endYear: endYear
   })
-  .then(console.log)
+  .then((movement) => {
+    console.log(JSON.parse(movement));
+  })
   .catch(console.error)
   .then(done);
 };
@@ -64,7 +66,7 @@ const index = () => {
   Movement.find(search)
     .then((movement)=> {
       movement.forEach((movement)=> {
-        console.log(movement);
+        console.log(JSON.parse(movement));
       });
     })
     .catch(console.error)
@@ -77,7 +79,7 @@ const show = (id) => {
   Movement.findById(id)
     .then((movement) => {
       if (movement) {
-        console.log(movement);
+        console.log(JSON.parse(movement));
       } else {
         console.log('Not Found');
       }
@@ -94,7 +96,8 @@ const update = (id, field, value) => {
   .then((movement)=> {
     if (movement) {
       movement[field] = value;
-      return movement.save();
+      movement.save();
+      console.log(JSON.parse(movement));
     } else {
       return console.log('Not Found');
     }
@@ -110,7 +113,8 @@ const destroy = (id) => {
   Movement.findById(id)
   .then((movement) => {
     if (movement) {
-      return movement.remove();
+      movement.remove();
+      console.log('removed');
     } else {
       return console.log('Not Found');
     }
