@@ -55,15 +55,7 @@ const create = (name, description, startYear, endYear) => {
 // Failure -> Console.error
 
 const index = () => {
-  let search = {};
-  if (arguments[0] && arguments[1]) {
-    let field = arguments[0];
-    let criterion = arguments[1];
-
-    search[field] = criterion;
-  }
-
-  Movement.find(search)
+  Movement.find()
     .then((movement)=> {
       movement.forEach((movement)=> {
         console.log(JSON.parse(movement));
