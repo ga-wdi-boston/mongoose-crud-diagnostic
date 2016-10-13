@@ -32,25 +32,64 @@ const Movement = require('./models/movement.js');
 
 /// ADD YOUR CODE BELOW
 
-const create = (name, description, startYear, endYear) => {};
+const create = (req, name, description, startYear, endYear, res) => {
+  let movement = Object.assign(req.body.movement, {
+    name: name,
+    description: description,
+    startYear: startYear,
+    endYear: endYear,
+  });
+  Movement.create(movement)
+    .then(movements => res.json({ movements}))
+    .catch(console.error);
+
+  };
 // Success -> console.log new Movement as JSON
 // Failure -> Console.error
 
-const index = () => {};
+const index = (res) => {
+  Movement.find()
+    .then(movements => res.json({ movements }))
+    .catch(console.error);
+  };
 // Success -> console.log all Movements as JSON
 // Failure -> Console.error
 
-const show = (id) => {};
+const show = (req, res, next) => {
+  Movement.findById(req.params.id)
+  .then(movement => movement ? res.json({ movement }) : next())
+  .catch(console.log('Not Found'));
+};
 // Success -> If the specified Movement exists, console.log it as JSON;
 //              otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
 
-const update = (id, field, value) => {};
+const update = (id, field, value) => {
+  let movement = Object.assign(id.body.book, {
+    _owner: id.currentUser._id,
+  });
+  Movement.create(movement)
+    .then(movement => field.json({ movement }))
+    .catch(console.error);
+
+};
 // Success -> If the specified Movement exists, update it and console.log the
 //              updated Movement as JSON; otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
 
-const destroy = (id) => {};
+const destroy = (id, res, next) => {
+  let search = { _id: id.params.id, _owner: id.currentUser._id };
+  Movement.findOne(search)
+  .then(movement => {
+    if (!movement) {
+      return next();
+    }
+    return movement.remove()
+    .then(() => res.sendStatus(200));
+  })
+  .catch(console.error);
+
+};
 // Success -> If the specified Movement exists, destroy it and console.log 'removed';
 //              otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
