@@ -38,6 +38,12 @@ const done = function() {//do i need to add this?
   db.close();
 };
 
+
+// NOTE QUESTION: should i use another callback to parse things as JSON? maybe something like this?
+
+// .then((movement(s)) => {
+//     console.log(JSON.parse(NOTE movement(s)NOTE));
+//   })
 const create = (name, description, startYear, endYear) => {
   Movement.create({
   name: name,
