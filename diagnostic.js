@@ -32,25 +32,90 @@ const Movement = require('./models/movement.js');
 
 /// ADD YOUR CODE BELOW
 
-const create = (name, description, startYear, endYear) => {};
+const db = mongoose.connection;
+
+const done = function() {
+  db.close();
+};
+
+const create = (name, description, startYear, endYear) => {
+  Movement.create({
+    name: name,
+    description: description,
+    startYear: startYear,
+    endYear: endYear
+  })
+  .then((movement) => {
+    console.log(JSON.parse(movement));
+  })
+  .catch(console.error)
+  .then(done);
+};
 // Success -> console.log new Movement as JSON
 // Failure -> Console.error
 
-const index = () => {};
+const index = () => {
+  Movement.find()
+    .then((movement)=> {
+      movement.forEach((movement)=> {
+        console.log(JSON.parse(movement));
+      });
+    })
+    .catch(console.error)
+    .then(done);
+};
 // Success -> console.log all Movements as JSON
 // Failure -> Console.error
 
-const show = (id) => {};
+const show = (id) => {
+  Movement.findById(id)
+    .then((movement) => {
+      // this ternary is giving me a weird linter error, but i don't know why...
+      // movement ? console.log(movement) : console.log("Not Found")
+      if (movement) {
+        console.log(JSON.parse(movement));
+      } else {
+        console.log('Not Found');
+      }
+    })
+    .catch(console.error)
+    .then(done);
+};
 // Success -> If the specified Movement exists, console.log it as JSON;
 //              otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
 
-const update = (id, field, value) => {};
+const update = (id, field, value) => {
+  Movement.findById(id)
+  .then((movement)=> {
+    if (movement) {
+      movement[field] = value;
+      movement.save();
+      console.log(JSON.parse(movement));
+    } else {
+      return console.log('Not Found');
+    }
+  })
+  .catch(console.error)
+  .then(done);
+};
 // Success -> If the specified Movement exists, update it and console.log the
 //              updated Movement as JSON; otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
 
-const destroy = (id) => {};
+const destroy = (id) => {
+  Movement.findById(id)
+  .then((movement) => {
+    if (movement) {
+      movement.remove();
+      console.log('removed');
+    } else {
+      return console.log('Not Found');
+    }
+  })
+  .catch(console.error)
+  .then(done);
+};
 // Success -> If the specified Movement exists, destroy it and console.log 'removed';
 //              otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
