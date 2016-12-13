@@ -32,20 +32,57 @@ const Movement = require('./models/movement.js');
 
 /// ADD YOUR CODE BELOW
 
-const create = (name, description, startYear, endYear) => {};
-// Success -> console.log new Movement as JSON
-// Failure -> Console.error
+const create = (name, description, startYear, endYear) => {
+  // Success -> console.log new Movement as JSON
+  // Failure -> Console.erroronst create = function(givenName, surname, dob, gender, height, weight) {
+  Movement.create({
+    name: name,
+    description: description,
+    startYear: startYear,
+    endYear: endYear,
+  })
+  .then(console.log)
+  .catch(console.error)
+  .then(done);
+};
 
-const index = () => {};
+
+const index = () => {
+  Movement.find(
+    .then((movement) => {
+      movement.forEach((movement) => {
+        return.JSON(movement);
+      });
+    })
+    .then(console.log)
+    .catch(console.error)
+    .then(done);
+  )};
 // Success -> console.log all Movements as JSON
 // Failure -> Console.error
 
-const show = (id) => {};
+const show = (id) => {
+  movement = Movement.findById(id)
+    if (movement !=== "") {
+      JSON.console.log(movement);
+    }
+    .then(console.log)
+    .catch(console.error)
+    .then(done);
+};
 // Success -> If the specified Movement exists, console.log it as JSON;
 //              otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
 
-const update = (id, field, value) => {};
+const update = (id, field, value) => {
+  movement = Movement.findById(id)
+    if (movement !=== "") {
+      return movement.save;
+    }
+    .then(console.log)
+    .catch(console.error)
+    .then(done);
+};
 // Success -> If the specified Movement exists, update it and console.log the
 //              updated Movement as JSON; otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
