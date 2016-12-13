@@ -30,31 +30,68 @@ mongoose.connect('mongodb://localhost/mongoose-crud-diagnostic');
 
 const Movement = require('./models/movement.js');
 
-/// ADD YOUR CODE BELOW
+const done = function() {
+  db.close();
+};
 
 const create = (name, description, startYear, endYear) => {};
-// Success -> console.log new Movement as JSON
-// Failure -> Console.error
+Movement.create({
+    'year.start': startYear,
+    'year.end': endYear,
+    name: name,
+    description: description
+  })
+  .then(function(person) {
+    console.log(person);
+  })
+  .catch(console.error)
+  .then(done);
+};
 
 const index = () => {};
-// Success -> console.log all Movements as JSON
-// Failure -> Console.error
+Movement.find()
+  .then(function(movement) {
+    movement.forEach(function(movement) {
+      console.log(movement.toJSON());
+    });
+  })
+  .catch(console.error)
+  .then(done);
+};
 
 const show = (id) => {};
-// Success -> If the specified Movement exists, console.log it as JSON;
-//              otherwise, console.log "Not Found" and exit.
-// Failure -> Console.error
+Movement.findById(id)
+  .then(function(movement) {
+    console.log(movement.toJSON());
+  })
+  .catch(console.error)
+  .then(done);
+};
 
 const update = (id, field, value) => {};
-// Success -> If the specified Movement exists, update it and console.log the
-//              updated Movement as JSON; otherwise, console.log "Not Found" and exit.
-// Failure -> Console.error
+let modify = {};
+modify[field] = value;
+Movement.findById(id)
+  .then(function(movement) {
+    movement[field] = value;
+    return movement.save();
+  })
+  .then(function(movement) {
+    console.log(movement.toJSON());
+  })
+  .catch(console.error)
+  .then(done);
+};
 
 const destroy = (id) => {};
-// Success -> If the specified Movement exists, destroy it and console.log 'removed';
-//              otherwise, console.log "Not Found" and exit.
-// Failure -> Console.error
-
+Movement.findById(id)
+  .then(function(movement) {
+    return movement.remove();
+    console.log('removed');
+  })
+  .catch(console.error)
+  .then(done);
+};
 module.exports = {
   create,
   index,
