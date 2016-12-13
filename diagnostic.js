@@ -37,12 +37,13 @@ const done = function() {
   db.close();
 };
 
-const create = (name, description, startYear, endYear) => {
+const create = (name, description, startYear, endYear, ancestor) => {
   Movement.create({
       'name': name,
       'description': description,
       'startYear': startYear,
-      'endYear': endYear
+      'endYear': endYear,
+      'ancestor': ancestor
     })
     .then(function(movement){
       console.log(movement.toJSON());
@@ -115,7 +116,46 @@ const destroy = (id) => {
 // Success -> If the specified Movement exists, destroy it and console.log 'removed';
 //              otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
+db.once('open', function() {
+  let command = process.argv[2];
 
+  // Using more than once, avoiding jshint complaints
+  let field;
+  let id;
+
+  switch (command) {
+    case 'create':
+      let name = process.argv[3];
+      let description = process.argv[4];
+      let startYear =  process.argv[5];
+      let endYear =  process.argv[6];
+      create(name, description, startYear, endYear);
+      done();
+      break;
+
+    case `show`:
+      id = process.argv[3];
+      show(id);
+      break;
+
+    case 'update':
+      id = process.argv[3];
+      field = process.argv[4];
+      let value = process.argv[5];
+      update(id, field, value);
+      break;
+
+    case 'destroy':
+      id = process.argv[3];
+      destroy(id);
+      break;
+
+    default:
+      index();
+      break;
+  }
+
+});
 
 
 module.exports = {
