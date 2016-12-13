@@ -32,25 +32,76 @@ const Movement = require('./models/movement.js');
 
 /// ADD YOUR CODE BELOW
 
-const create = (name, description, startYear, endYear) => {};
+const create = (name, description, startYear, endYear) => {
+  Person.create({
+    'name': name,
+    'description': description,
+    'startYear': startYear,
+    'endYear': endYear
+  })
+  .then((place) => {
+    console.log(movement);
+  })
+  .catch((err) => {
+    console.error(err);
+  })
+  .then(done)
+  ;
+};
 // Success -> console.log new Movement as JSON
 // Failure -> Console.error
 
-const index = () => {};
+const index = (field, criterion) => {
+  Movement.find({ field: criterion}, (err, docs) => {
+    if (err){
+      console.error(err);
+    } else {
+      console.log(docs.toJSON());
+    }
+  })
+  .catch(console.error)
+  .then(done);
+};
 // Success -> console.log all Movements as JSON
 // Failure -> Console.error
 
-const show = (id) => {};
+const show = (id) => {
+  Movement.findById(id)
+  .then((movement) => {
+    console.log(movement.toJSON());
+  })
+  .catch(console.error)
+  .then(done);
+};
 // Success -> If the specified Movement exists, console.log it as JSON;
 //              otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
 
-const update = (id, field, value) => {};
+const update = (id, field, value) => {
+  Movement.findById(id)
+  .then((movement) => {
+    movement[field] = value;
+    return movement[field].save();
+  })
+  .then(console.log)
+  .catch(console.error("Not Found"))
+  .then(done)
+  ;
+};
 // Success -> If the specified Movement exists, update it and console.log the
 //              updated Movement as JSON; otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
 
-const destroy = (id) => {};
+const destroy = (id) => {
+  Movement.findById(id)
+  .then((movement) => {
+    console.log('removed');
+    return movement.remove();
+  })
+  .catch(console.error("Not Found"))
+  .then(done)
+  ;
+};
 // Success -> If the specified Movement exists, destroy it and console.log 'removed';
 //              otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
