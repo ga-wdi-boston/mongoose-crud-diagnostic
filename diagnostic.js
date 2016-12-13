@@ -31,21 +31,77 @@ mongoose.connect('mongodb://localhost/mongoose-crud-diagnostic');
 const Movement = require('./models/movement.js');
 
 /// ADD YOUR CODE BELOW
+const done = function() {
+  db.close();
+};
 
 const create = (name, description, startYear, endYear) => {};
+Movement.create({
+  'name.given': name,  //?? Confused here because name is a standard field (not allowed to use?)  What would we set this to?
+  description: description,
+  startYear: startYear,
+  endYear: endYear,
+  _ancestor: _ancestor,
+})
+.then(function(movement){
+  console.log(movement.toJSON());
+})
+.catch(console.error)
+.then(done);
+};
 // Success -> console.log new Movement as JSON
 // Failure -> Console.error
 
 const index = () => {};
+Movement.find()
+  .then(function(movement){
+    people.forEach(function(movement){
+      console.log(movement.toJSON());
+    });
+  })
+  .catch(console.error)
+  .then(done);
+};
 // Success -> console.log all Movements as JSON
 // Failure -> Console.error
 
 const show = (id) => {};
+Movement.findById(id)
+  if {
+  .then(function(movement){
+    console.log(movement.toJSON());
+  })
+  else {
+    console.log('Not Found')
+}
+}
+  .catch(console.error)
+  .then(done);
+};
 // Success -> If the specified Movement exists, console.log it as JSON;
 //              otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
 
 const update = (id, field, value) => {};
+let modify = {};
+modify[field] = value;
+Movement.findById(id)
+  if {
+  .then(function(movement){
+    movement[field] = value;
+    return movement.save();
+  })
+  .then(function(movement){
+    console.log(movement.toJSON());
+  })
+  else {
+    console.log('Not Found')
+}
+}
+  .catch(console.error)
+  .then(done);
+};
+
 // Success -> If the specified Movement exists, update it and console.log the
 //              updated Movement as JSON; otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
