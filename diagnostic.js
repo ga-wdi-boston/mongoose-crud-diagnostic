@@ -33,27 +33,75 @@ const Movement = require('./models/movement.js');
 /// ADD YOUR CODE BELOW
 
 const create = (name, description, startYear, endYear) => {};
-// Success -> console.log new Movement as JSON
-// Failure -> Console.error
+  Movement.create({
+    'name': name,
+    'description': description,
+    'startYear': startYear,
+    'endYear': endYear,
+  })
+  .then(console.log)
+  .catch(console.error)
+  .then(done);
+  };
 
 const index = () => {};
 // Success -> console.log all Movements as JSON
 // Failure -> Console.error
+  Movement.find()
+    .then((movement)=>{
+      movement.forEach((movement)=> {
+        console.log(movement);
+      });
+    })
+    .catch(console.error);
+    .then(done);
+  };
 
 const show = (id) => {};
 // Success -> If the specified Movement exists, console.log it as JSON;
 //              otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
+  Movement.findById(id)
+    .then(movement => movement ? console.log(res.json({ movement })) :
+          console.log("Not Found"))
+    })
+    .catch(console.error)
+    .then(done);
+  };
 
 const update = (id, field, value) => {};
 // Success -> If the specified Movement exists, update it and console.log the
 //              updated Movement as JSON; otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
+  Movement.findById(id)
+  .then(movement => {
+    if (!movement) {
+      console.log("Not Found");
+    }
+    return movement.update(req.body.movement)
+      .then(() => console.log(res.json({ movement }));
+  })
+  .catch(err => next(err));
+};
 
 const destroy = (id) => {};
 // Success -> If the specified Movement exists, destroy it and console.log 'removed';
 //              otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
+let search = { _id: req.params.id};
+Example.findOne(search)
+  .then(movement => {
+    if (!movement) {
+      console.log("Not Found");
+      .done();
+    }
+
+    return example.remove()
+      .then(() => console.log("removed"));
+  })
+  .catch(console.error;
+  .done();
+};
 
 module.exports = {
   create,
