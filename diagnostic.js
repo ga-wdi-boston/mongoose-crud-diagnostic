@@ -30,27 +30,66 @@ mongoose.connect('mongodb://localhost/mongoose-crud-diagnostic');
 
 const Movement = require('./models/movement.js');
 
-/// ADD YOUR CODE BELOW
-
-const create = (name, description, startYear, endYear) => {};
+const create = (name, description, startYear, endYear, ancestor) => {
+  Movement.create({
+    'name': name,
+    'description': description,
+    startYear: startYear,
+    endYear: endYear,
+    'ancestor': ancestor
+  })
+  .then(movement => res.json({ movement }))
+  .catch(err => next(err));
+};
 // Success -> console.log new Movement as JSON
 // Failure -> Console.error
 
-const index = () => {};
-// Success -> console.log all Movements as JSON
-// Failure -> Console.error
+const index = () => {
+  Movement.find()
+    .then(movement) => {
+      movement.forEach((movement)=>{
+        console.log(movement);
+      });
+    })
+    .then(movement => movement ? res.json({ movement }) : next())
+    .catch(console.error)
+};
 
-const show = (id) => {};
+const show = (id) => {
+  Movement.find()
+  .then((movement)=>{
+    console.log(movement);
+  })
+  .catch(console.error)
+  .then(done);
+};
+
+};
 // Success -> If the specified Movement exists, console.log it as JSON;
 //              otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
 
-const update = (id, field, value) => {};
+const update = function(id, field, value) {
+  Movement.findById(id)
+    .then((movement)=>{
+      movement[field] = value;
+      return movement.save();
+    })
+    .then(console.log)
+    .catch(console.error)
+};
 // Success -> If the specified Movement exists, update it and console.log the
 //              updated Movement as JSON; otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
 
-const destroy = (id) => {};
+const destroy = function(id) {
+  Movement.findById(id)
+    .then((movement)=>{
+      return movement.remove():
+    })
+    .then(done);
+    .catch(console.error)
+};
 // Success -> If the specified Movement exists, destroy it and console.log 'removed';
 //              otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
