@@ -32,28 +32,87 @@ const Movement = require('./models/movement.js');
 
 /// ADD YOUR CODE BELOW
 
-const create = (name, description, startYear, endYear) => {};
-// Success -> console.log new Movement as JSON
-// Failure -> Console.error
+const create = (name, description, startYear, endYear) => {
+  Movement.create({
+  name: name,
+  description: description,
+  startYear: startYear,
+  endYear: endYear,
+  }).then(function(movement) {
+    // Success -> console.log new Movement as JSON
+    console.log(movement.toJSON());
+  }).catch(function(error) {
+    // Failure -> Console.error
+    console.error(error);
+  });
+};
 
-const index = () => {};
-// Success -> console.log all Movements as JSON
-// Failure -> Console.error
+const index = () => {
+  // we did .find(search) in the class but this time the user will 'click' on
+  // a particular piece of art
+  Movement.find(click).then(function(movements) {
+  movements.forEach(function(movement) {
+    // Success -> console.log all Movements as JSON
+    console.log(movement.toJSON());
+  }).catch(function(error) {
+    // Failure -> Console.error
+    console.error(error);
+  });
+});
+};
 
-const show = (id) => {};
-// Success -> If the specified Movement exists, console.log it as JSON;
-//              otherwise, console.log "Not Found" and exit.
-// Failure -> Console.error
+const show = (id) => {
+  Movement.findById(id).then(function(movement) {
+    if (id.length !== 0) {
+    console.log(movement.toJSON());
+  } else {
+    // Success -> If the specified Movement exists, console.log it as JSON;
+    // otherwise, console.log "Not Found" and exit.
+    console.log('Not Found' + exit); // not sure what is meant by 'exit'....
+  }
+  }).catch(function(error) {
+    // Failure -> Console.error
+    console.error(error);
+  });
+};
 
-const update = (id, field, value) => {};
-// Success -> If the specified Movement exists, update it and console.log the
-//              updated Movement as JSON; otherwise, console.log "Not Found" and exit.
-// Failure -> Console.error
+const update = (id, field, value) => {
+  let modify = {};
+  modify[field] = value;
+  Movement.findById(id).then(function(movement) {
+  movement[field] = value;
+  return movement.save();
+}).then(function(movement) {
+  if (id.length !== 0) {
+    // Success -> If the specified Movement exists, console.log it as JSON;
+  console.log(movement.toJSON());
+  } else {
+  // otherwise, console.log "Not Found" and exit.
+  console.log('Not Found' + exit); // not sure what is meant by 'exit'....
+  }
+}).catch(function(error) {
+    // Failure -> Console.error
+    console.error(error);
+  });
+};
 
-const destroy = (id) => {};
-// Success -> If the specified Movement exists, destroy it and console.log 'removed';
-//              otherwise, console.log "Not Found" and exit.
-// Failure -> Console.error
+
+const destroy = (id) => {
+  Movement.findById(id).then(function(movement) {
+  }).then(function(movement) {
+    // Success -> If the specified Movement exists, destroy it and console.log 'removed';
+    if (id.length !== 0) {
+    return movement.remove();
+    console.log('removed');
+    } else {
+    // otherwise, console.log "Not Found" and exit.
+    console.log('Not Found' + exit); // not sure what is meant by 'exit'....
+    }
+  }).catch(function(error) {
+      // Failure -> Console.error
+      console.error(error);
+  });
+};
 
 module.exports = {
   create,
