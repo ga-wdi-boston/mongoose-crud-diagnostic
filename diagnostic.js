@@ -108,7 +108,8 @@ const update = (id, field, value) => {
 const destroy = (id) => {
   Movement.findById(id).then(function(movement) {
     if (movement !== undefined) {
-      return movement.remove();
+      movement.remove();
+      console.log('removed');
     } else {
       console.log('Not found');
     }
