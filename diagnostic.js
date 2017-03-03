@@ -50,7 +50,7 @@ const create = (name, description, startYear, endYear) => {
 const index = () => {
   // we did .find(search) in the class but this time the user will 'click' on
   // a particular piece of art
-  PlaMovementce.find(click).then(function(movements) {
+  Movement.find(click).then(function(movements) {
   movements.forEach(function(movement) {
     // Success -> console.log all Movements as JSON
     console.log(movement.toJSON());
