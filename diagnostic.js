@@ -27,30 +27,91 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/mongoose-crud-diagnostic');
+const db = mongoose.connection;
 
 const Movement = require('./models/movement.js');
 
+const done = function() {
+  db.close();
+};
 /// ADD YOUR CODE BELOW
 
-const create = (name, description, startYear, endYear) => {};
+const create = (name, description, startYear, endYear) => {
+  Movement.create({
+      name: name,
+      description: description,
+      startYear: startYear,
+      endYear: endYear
+    })
+    .then(function(movement) {
+      console.log(movement.toJSON());
+    })
+    .catch(console.error)
+    .then(done);
+};
 // Success -> console.log new Movement as JSON
 // Failure -> Console.error
 
-const index = () => {};
+const index = () => {
+  Movement.find()
+    .then(function(movements) {
+      movements.forEach(function(movement) {
+        console.log(movement);
+      });
+    })
+    .catch(console.error)
+    .then(done);
+};
 // Success -> console.log all Movements as JSON
 // Failure -> Console.error
 
-const show = (id) => {};
+const show = (id) => {
+  Movement.findById(id)
+    .then(function(movement) {
+      if (!movement) {
+        return console.log("Not Found");
+      }
+      console.log(movement.toJSON());
+    })
+    .catch(console.error)
+    .then(done);
+};
 // Success -> If the specified Movement exists, console.log it as JSON;
 //              otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
 
-const update = (id, field, value) => {};
+const update = (id, field, value) => {
+  let modify = {};
+  modify[field] = value;
+  Movement.findById(id)
+    .then(function(movement) {
+      if (!movement) {
+        return console.log("Not Found");
+      }
+      movement[field] = value;
+      return movement.save();
+    })
+    .then(function(movement) {
+      console.log(movement.toJSON());
+    })
+    .catch(console.error("Not Found"))
+    .then(done);
+};
 // Success -> If the specified Movement exists, update it and console.log the
 //              updated Movement as JSON; otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
 
-const destroy = (id) => {};
+const destroy = (id) => {
+  Movement.findById(id)
+    .then(function(movement) {
+      if (!movement) {
+        return console.log("Not Found");
+      }
+      return movement.remove();
+    })
+    .catch(console.error)
+    .then(done);
+};
 // Success -> If the specified Movement exists, destroy it and console.log 'removed';
 //              otherwise, console.log "Not Found" and exit.
 // Failure -> Console.error
